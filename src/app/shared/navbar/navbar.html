@@ -1,0 +1,53 @@
+<nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] md:w-auto z-[100]">
+    <div
+        class="bg-white/80 backdrop-blur-xl border border-slate-200 shadow-[0_8px_32px_rgba(0,0,0,0.1)] rounded-full px-4 md:px-8 py-3 flex items-center gap-8 md:gap-12 transition-all duration-500 hover:border-slate-300">
+
+        <!-- Logo -->
+        <a routerLink="/" class="flex items-center gap-3">
+            <div class="relative w-16 h-16 flex items-center justify-center overflow-hidden rounded-full">
+                <img src="/logo.png" alt="KyberGourmet Logo" class="relative w-full h-full object-cover" />
+            </div>
+            <span class="text-xl font-black text-slate-900 tracking-widest uppercase">
+                KyberGourmet
+            </span>
+        </a>
+
+        <!-- Links -->
+        <div class="hidden md:flex items-center gap-8">
+            <a routerLink="/" routerLinkActive #rlaHome="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
+                class="text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-indigo-400 relative py-1"
+                [class.text-indigo-400]="rlaHome.isActive" [class.text-slate-400]="!rlaHome.isActive">
+                Explorar
+                @if(rlaHome.isActive) {
+                <span
+                    class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#6366f1]"></span>
+                }
+            </a>
+            <a routerLink="/admin" routerLinkActive #rlaAdmin="routerLinkActive"
+                class="text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-indigo-400 relative py-1"
+                [class.text-indigo-400]="rlaAdmin.isActive" [class.text-slate-400]="!rlaAdmin.isActive">
+                Gestión
+                @if(rlaAdmin.isActive) {
+                <span
+                    class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#6366f1]"></span>
+                }
+            </a>
+            <a routerLink="/cart" routerLinkActive #rlaCart="routerLinkActive"
+                class="text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:text-indigo-400 relative py-1 flex items-center gap-2"
+                [class.text-indigo-400]="rlaCart.isActive" [class.text-slate-400]="!rlaCart.isActive">
+                Carrito
+                @if(cartService.totalItems() > 0) {
+                <span
+                    class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-lg shadow-indigo-500/30">
+                    {{ cartService.totalItems() }}
+                </span>
+                }
+                @if(rlaCart.isActive) {
+                <span
+                    class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_#6366f1]"></span>
+                }
+            </a>
+        </div>
+
+    </div>
+</nav>

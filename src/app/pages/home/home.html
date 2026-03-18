@@ -1,0 +1,40 @@
+<div class="min-h-screen bg-slate-50 pt-32 pb-20 px-4 md:px-10 overflow-hidden relative font-sans">
+
+    <!-- Hero Background Orbs -->
+    <div
+        class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2">
+    </div>
+    <div
+        class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-600/5 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2">
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+
+        <!-- Gourmet Title -->
+        <header class="mb-20 text-center">
+            <h1 class="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none mb-6">
+                Descubre el Sabor <br />
+                <span class="text-indigo-600">Kyber-Gourmet</span>
+            </h1>
+            <p class="text-slate-600 max-w-2xl mx-auto text-lg font-medium opacity-80">
+                Selección exclusiva de platillos diseñados para deleitar tus sentidos en un entorno digital de
+                vanguardia.
+            </p>
+        </header>
+
+        <!-- Grid de Platillos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-10">
+            @for (food of foods(); track food.id) {
+            <app-food-card [food]="food"></app-food-card>
+            }
+        </div>
+
+        @if(foods().length === 0) {
+        <div class="flex flex-col items-center justify-center py-40">
+
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight mb-2 uppercase">Aún estamos cocinando...</h3>
+            <p class="text-slate-500 font-medium">Pronto aparecerán las mejores opciones para ti.</p>
+        </div>
+        }
+    </div>
+</div>
