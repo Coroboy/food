@@ -18,12 +18,10 @@ export class Admin implements OnInit {
 
     foods = signal<Food[]>([]);
     isEditModalOpen = signal(false);
-    isDeleteModalOpen = signal(false);
     isProcessing = signal(false);
     isEditMode = signal(true);
 
     selectedFood = signal<Food | null>(null);
-    foodToDelete = signal<Food | null>(null);
 
     formEdit: FormGroup = this.fb.group({
         name: ['', [Validators.required, Validators.minLength(5)]],
@@ -73,33 +71,31 @@ export class Admin implements OnInit {
         }
     }
 
-    deleteFood(food: Food) {
-        this.foodToDelete.set(food);
-        this.isDeleteModalOpen.set(true);
-    }
+    async deleteFood(food: Food) {
+        const confirmed = await this.notificationService.confirm(
+            '¿Eliminar platillo?',
+            `¿Estás seguro de que quieres eliminar "${food.name}" del catálogo? Esta acción no se puede deshacer.`,
+            'Sí, eliminar'
+        );
 
-    async confirmDelete() {
-        const food = this.foodToDelete();
-        if (!food || this.isProcessing()) return;
+        if (confirmed) {
+            this.isProcessing.set(true);
+            console.log('Admin: Deleting ID:', food.id);
 
-        this.isProcessing.set(true);
-        console.log('Admin: Confirming delete for ID:', food.id);
-
-        try {
-            const success = await this.foodService.deleteFood(food.id);
-            if (success) {
-                this.notificationService.show(`"${food.name}" eliminado del catálogo`, 'info');
-                this.isDeleteModalOpen.set(false);
-                this.foodToDelete.set(null);
-                await this.loadFoods();
-            } else {
-                this.notificationService.show('Error al eliminar registro', 'error');
+            try {
+                const success = await this.foodService.deleteFood(food.id);
+                if (success) {
+                    this.notificationService.show(`"${food.name}" eliminado del catálogo`, 'info');
+                    await this.loadFoods();
+                } else {
+                    this.notificationService.show('Error al eliminar registro', 'error');
+                }
+            } catch (err) {
+                console.error('Admin: Unexpected Error:', err);
+                this.notificationService.show('Error técnico al eliminar', 'error');
+            } finally {
+                this.isProcessing.set(false);
             }
-        } catch (err) {
-            console.error('Admin: Unexpected Error:', err);
-            this.notificationService.show('Error técnico al eliminar', 'error');
-        } finally {
-            this.isProcessing.set(false);
         }
     }
 

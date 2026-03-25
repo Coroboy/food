@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-cart',
@@ -11,6 +12,7 @@ import { CartService } from '../../core/services/cart.service';
 })
 export class Cart {
   cartService = inject(CartService);
+  private notificationService = inject(NotificationService);
 
   private readonly fallbackImages = [
     'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop',
@@ -34,5 +36,29 @@ export class Cart {
       style: 'currency',
       currency: 'USD',
     }).format(this.cartService.totalPrice());
+  }
+
+  async placeOrder() {
+    const confirmed = await this.notificationService.confirm(
+      '¿Confirmar pedido?',
+      '¿Estás seguro de que quieres realizar este pedido?'
+    );
+    
+    if (confirmed) {
+      this.cartService.clearCart();
+      this.notificationService.show('¡Pedido realizado con éxito!', 'success');
+    }
+  }
+
+  async onClearCart() {
+    const confirmed = await this.notificationService.confirm(
+      '¿Vaciar carrito?',
+      'Se eliminarán todos los productos de tu carrito.'
+    );
+
+    if (confirmed) {
+      this.cartService.clearCart();
+      this.notificationService.show('Carrito vaciado', 'info');
+    }
   }
 }

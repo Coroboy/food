@@ -3,22 +3,16 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment.development';
 import { Food, NewFood } from '../../interfaces/food.interface';
 
+import { SupabaseService } from './supabase.service';
+
 @Injectable({
     providedIn: 'root'
 })
 export class FoodSupabaseService {
     private supabase: SupabaseClient;
 
-    constructor() {
-        this.supabase = createClient(
-            environment.supabase.url,
-            environment.supabase.publicKey,
-            {
-                auth: {
-                    persistSession: false
-                }
-            }
-        );
+    constructor(private supabaseService: SupabaseService) {
+        this.supabase = this.supabaseService.client;
     }
 
     async getFood(): Promise<Food[]> {

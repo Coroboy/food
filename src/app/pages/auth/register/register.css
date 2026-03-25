@@ -1,0 +1,12 @@
+/* Shared auth styles */
+:host {
+  display: block;
+}
+
+form input:focus {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: scale(0.98);
+}
